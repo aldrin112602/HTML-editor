@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTML EDITOR by Aldrin Caballero</title>
+    <style>
+    * {
+      padding:0;
+      margin:0;
+      box-sizing: border-box;
+    }
+    .editor {
+      position: fixed;
+      top:0;
+      height:50px;
+      background: rgb(91, 30, 147);
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      z-index: 2;
+    }
+    .editor button {
+      width: calc(100% / 4);
+      height: 100%;
+      font-size: 17px;
+      background-color: transparent;
+      color: #fff;
+      border:none;
+      border-left:1px solid #fff;
+      outline: none;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .editor button:hover {
+      background: #fff;
+      color:#000;
+      transition: all 0.3s;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    }
+    textarea {
+      padding:10px;
+      background-color:#fff;
+      color:#000;
+      font-family: sans-serif;
+      font-size: 17px;
+      position: fixed;
+      top:50px;
+      left:0;
+      height: 90vh;
+      width: 100vw;
+    }
+    .output {
+      position: absolute;
+      top: 50px;
+      left:0;
+      height: auto;
+      padding:auto;
+      margin:auto;
+      width: 100vw;
+      z-index: 1;
+      
+    }
+    </style>
+    <style class="css"></style>
+</head>
+<body>
+  <div class="editor">
+    <button style="border:none">HTML</button>
+    <button>CSS</button>
+    <button>JS</button>
+    <button>OUTPUT</button>
+  </div>
+<textarea autocapitalize="off" class="html"></textarea>
+<textarea autocapitalize="off" class="css"></textarea>
+<textarea autocapitalize="off" class="js"></textarea>
+<div class="output"></div>
+<script id="js"></script>
+<script>
+var hover = `
+      background: #fff;
+      color:#000;
+      transition: all 0.3s;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+`;
+var def = `
+      width: calc(100% / 4);
+      height: 100%;
+      font-size: 17px;
+      background-color: transparent;
+      color: #fff;
+      border:none;
+      border-left:1px solid #fff;
+      outline: none;
+      font-weight: bold;
+      letter-spacing: 1px;
+`;
+  var textarea = document.querySelectorAll('textarea');
+  let Js;
+  textarea.forEach((v, i, arr) => {
+    v.addEventListener('input', () => {
+      if(i == 0) {
+        document.querySelector('.output').innerHTML = v.value;
+        localStorage.setItem('html', v.value)
+      }else if(i == 1) {
+        localStorage.setItem('css', v.value);
+      document.querySelector('.css').innerHTML = v.value;  
+      }else {
+        Js = v.value;
+       // Js = Js.replace(/[{]/g, '{ }');
+       // Js = Js.replace(/[)]/g, ')');
+       // v.value = Js;
+        localStorage.setItem('js', Js);
+        document.querySelector('#js').innerHTML = Js;
+      }
+    })
+  });
+  
+  textarea[1].style.display = 'none';
+  textarea[2].style.display = 'none';
+  var button = document.querySelectorAll('button');
+  var output = document.querySelector('.output');
+  output.style.display = 'none';
+  button[0].addEventListener('click', () => {
+  button[0].style = hover;
+  button[1].style = def;
+  button[2].style = def;
+  button[3].style = def;
+  textarea[0].style.display = 'block';
+  textarea[1].style.display = 'none';
+  textarea[2].style.display = 'none';
+  output.style.display = 'none';
+  });
+  button[1].addEventListener('click', () => {
+  button[1].style = hover;
+  button[0].style = def;
+  button[2].style = def;
+  button[3].style = def;
+  textarea[1].style.display = 'block';
+  textarea[0].style.display = 'none';
+  textarea[2].style.display = 'none';
+  output.style.display = 'none';
+  });
+  button[2].addEventListener('click', () => {
+  button[2].style = hover;
+  button[1].style = def;
+  button[3].style = def;
+  button[0].style = def;
+  textarea[2].style.display = 'block';
+  textarea[1].style.display = 'none';
+  textarea[0].style.display = 'none';  
+  output.style.display = 'none';
+  })
+  
+  button[3].addEventListener('click', () => {
+  button[3].style = hover;
+  button[1].style = def;
+  button[0].style = def;
+  button[2].style = def;
+  output.style.display = 'block';
+  textarea[1].style.display = 'none';
+  textarea[2].style.display = 'none'; 
+  textarea[0].style.display = 'none'; 
+  localStorage.setItem('reload', 'true');
+  location.reload();
+  })
+  if(localStorage.html != undefined) {
+  textarea[0].value = localStorage.html;
+  } else {
+   textarea[0].value = `<!---Your HTML codes here--->`; 
+  }
+  if(localStorage.css != undefined) {
+  textarea[1].value = localStorage.css;
+  } else {
+    textarea[1].value = '/**Your CSS codes here**/';
+  }
+  if(localStorage.js != undefined) {
+  textarea[2].value = localStorage.js;
+  } else {
+    textarea[2].value = `//Your Javascript codes here`;
+  }
+  output.innerHTML = textarea[0].value;
+  document.querySelector('.css').innerHTML = textarea[1].value;
+  document.querySelector('#js').innerHTML = textarea[2].value; 
+  if(localStorage.getItem('reload') != 'true') {
+    textarea[0].style.display = 'block';
+    button[0].style = hover;
+    button[3].style = def;
+  } else {
+    button[3].style = hover;
+    button[0].style = def;
+    output.style.display = 'block';
+    textarea[0].style.display = 'none';
+  }
+  
+</script>
+</body>
+</html>
